@@ -1,3 +1,8 @@
+<div align="center">
+  <img src="assets/banner.svg" width="100%" alt="🛡️ ReviewShield AI — White-Label Review Pipeline — banner"/>
+</div>
+
+
 # 🛡️ ReviewShield AI — White-Label Review Pipeline
 > White-label review generation pipeline — turns satisfied customers into public 5-star reviews.
 
