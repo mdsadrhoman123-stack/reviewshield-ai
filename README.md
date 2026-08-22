@@ -15,6 +15,12 @@
 <!-- Interactive Architecture Diagram -->
 [View Interactive Architecture Diagram](https://raw.githubusercontent.com/mdsadrhoman123-stack/reviewshield-ai/main/assets/diagrams/review-interactive.html)
 
+<!-- Portfolio Navigation -->
+<script src="https://raw.githubusercontent.com/mdsadrhoman123-stack/reviewshield-ai/main/assets/navigation/navigation.js"></script>
+<script>
+autoInjectNavigation('reviewshield-ai');
+</script>
+
 ---
 
 ## Contents
