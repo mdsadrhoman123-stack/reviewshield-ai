@@ -80,8 +80,8 @@ flowchart LR
 1. **Intake:** Customer data collected from various sources
 2. **Personalize:** GPT-4 generates personalized outreach messages
 3. **Analyze:** Sentiment analysis determines feedback routing
-4. **Route Positive:** Positive sentiment → public review platforms
-5. **Route Negative:** Negative sentiment → private internal resolution
+4. **Route Positive:** Positive sentiment â†’ public review platforms
+5. **Route Negative:** Negative sentiment â†’ private internal resolution
 6. **Render:** Puppeteer generates branded review cards for social proof
 7. **Alert:** Internal notifications for negative feedback requiring attention
 
@@ -127,33 +127,33 @@ flowchart LR
 ### BEFORE (Manual Review Management - Risky)
 ```
 [Customer Interaction] 
-    ↓ (manual tracking)
+    â†“ (manual tracking)
 [Generic Request] 
-    ↓ (no personalization)
+    â†“ (no personalization)
 [Public Posting] 
-    ↓ (no filtering)
+    â†“ (no filtering)
 [Negative Feedback Public] 
-    ↓ (brand damage)
+    â†“ (brand damage)
 [No Private Resolution] 
-    ↓
-= **Inconsistent requests, brand reputation risk, no scalability** ❌
+    â†“
+= **Inconsistent requests, brand reputation risk, no scalability** âŒ
 ```
 
 ### AFTER (Automated Review Pipeline - Protected)
 ```
 [Customer Interaction] 
-    ↓ (automated tracking)
+    â†“ (automated tracking)
 [AI-Personalized Request] 
-    ↓ (GPT-4 tailored)
+    â†“ (GPT-4 tailored)
 [Sentiment Analysis] 
-    ↓ (intelligent routing)
-[Positive → Public] 
-    ↓ (brand cards)
-[Negative → Private] 
-    ↓ (internal resolution)
+    â†“ (intelligent routing)
+[Positive â†’ Public] 
+    â†“ (brand cards)
+[Negative â†’ Private] 
+    â†“ (internal resolution)
 [Multi-Tenant Management] 
-    ↓
-= **Consistent requests, brand protected, agency-scalable** ✅
+    â†“
+= **Consistent requests, brand protected, agency-scalable** âœ…
 ```
 
 **The difference:** AI-powered review management with sentiment-based brand protection and white-label scalability.
@@ -265,14 +265,14 @@ A: GPT-4 provides high-accuracy sentiment classification for brand protection.
 
 **K MD SAYAD RAHMAN** - Sayad.dev | AI Automation
 
-**📧 Work Email:** khandokarsayad@gmail.com  
-**📧 Personal Email:** mdsadrhoman123@gmail.com  
-**💼 LinkedIn:** https://linkedin.com/in/khandokarsabbir  
-**🐙 GitHub:** https://github.com/mdsadrhoman123-stack
+**ðŸ“§ Work Email:** khandokarsayad@gmail.com  
+**ðŸ“§ Personal Email:** mdsadrhoman123@gmail.com  
+**ðŸ’¼ LinkedIn:** https://linkedin.com/in/khandokarsabbir  
+**ðŸ™ GitHub:** https://github.com/mdsadrhoman123-stack
 
-**🚀 Open to Work - Accepting New Automation Projects**
+**ðŸš€ Open to Work - Accepting New Automation Projects**
 
-**📩 Email me with your automation challenge - I'll tell you exactly 
+**ðŸ“© Email me with your automation challenge - I'll tell you exactly 
 which part I'd automate first, and which part I wouldn't.**
 
 ---
@@ -290,7 +290,7 @@ which part I'd automate first, and which part I wouldn't.**
 
 **Built by K MD SAYAD RAHMAN (Sayad.dev | AI Automation)**
 
-**📧 Contact:** khandokarsayad@gmail.com | mdsadrhoman123@gmail.com
+**ðŸ“§ Contact:** khandokarsayad@gmail.com | mdsadrhoman123@gmail.com
 
 Copyright (c) 2024 K MD SAYAD RAHMAN. All rights reserved. Portfolio use only.
 
