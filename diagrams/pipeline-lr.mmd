@@ -1,0 +1,17 @@
+flowchart LR
+    done(["A customer finishes"])
+    ask["Asked at the right moment, personally"]
+    felt{"How did they feel?"}
+    pub["Happy → sent to a public review"]
+    priv["Unhappy → kept private, not public"]
+
+    done --> ask
+    ask --> felt
+    felt --> pub
+    felt -.-> priv
+
+    classDef default fill:#F8F7F3,stroke:#12151B,stroke-width:1px,color:#12151B;
+    classDef ok fill:#2F6B52,stroke:#12151B,stroke-width:1px,color:#F5F4EF;
+    classDef bad fill:#FEE2E2,stroke:#DC2626,stroke-width:1.5px,color:#7F1D1D;
+    class pub ok;
+    class priv bad;
