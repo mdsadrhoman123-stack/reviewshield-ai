@@ -1,6 +1,6 @@
 # 01 · The problem
 
-**ReviewShield AI** — Agencies reselling to local businesses
+**ReviewShield AI** — the problem, as Agencies reselling to local businesses describe it
 
 ---
 
@@ -22,4 +22,4 @@ A timed outreach sequence generates a personalised message and a branded review 
 
 ---
 
-[← README](../README.md) · [02 · The client journey →](02-journey.md)
+[← README](../README.md) · [02 · The journey →](02-journey.md)

@@ -29,6 +29,12 @@ header.hero{background:var(--ink);color:#F5F4EF;padding:76px 0 68px;
 header.hero h1{font-size:clamp(38px,6vw,64px);line-height:1.03;margin:0 0 20px}
 header.hero p.promise{font-size:19px;line-height:1.55;color:#C6CFDB;
   max-width:60ch;margin:0 0 30px}
+/* The demo is a single file — someone may well open it with no README in
+   sight, so the provenance has to travel with it. */
+header.hero p.prov{font-size:14px;line-height:1.62;color:#8A94A3;
+  max-width:66ch;margin:24px 0 0;border-left:2px solid #2E3542;
+  padding-left:14px}
+header.hero p.prov b{color:#C6CFDB}
 .meta{display:flex;flex-wrap:wrap;gap:10px}
 .pill{font-size:12px;letter-spacing:.4px;padding:6px 12px;border-radius:999px;
   border:1px solid #2E3542;color:#A9B3C1}
@@ -135,10 +141,15 @@ a{color:var(--green)}
     <h1>ReviewShield AI</h1>
     <p class="promise">Happy customers are asked at the right moment and sent to a public review. Unhappy ones are routed to a private form before they ever reach Google.</p>
     <div class="meta">
-      <span class="pill ok">sellable product</span>
+      <span class="pill ok">running on my own n8n</span>
       <span class="pill">E-commerce / reviews</span>
-      <span class="pill">Built for Agencies reselling to local businesses</span>
+      <span class="pill">For Agencies reselling to local businesses</span>
+      <span class="pill">Ready to deploy</span>
     </div>
+    <p class="prov">Built from a real brief — businesses in this sector post
+    this problem publicly, in their own words, and I built a system for the
+    problem exactly as stated. It is production-grade and runs on my own infrastructure.
+    <b>It has not been sold or deployed into a customer's business: it is available, not delivered.</b></p>
   </div>
 </header>
 
@@ -219,7 +230,7 @@ a{color:var(--green)}
 </footer>
 
 <script>
-var DATA = {"nodes": [{"id": "done", "label": "A customer finishes", "kind": "trigger"}, {"id": "ask", "label": "Asked at the right moment, personally", "kind": "step"}, {"id": "felt", "label": "How did they feel?", "kind": "logic"}, {"id": "pub", "label": "Happy → sent to a public review", "kind": "success"}, {"id": "priv", "label": "Unhappy → kept private, not public", "kind": "fail"}], "edges": [{"a": "done", "b": "ask"}, {"a": "ask", "b": "felt"}, {"a": "felt", "b": "pub"}, {"a": "felt", "b": "priv"}], "fails": [{"what": "Customer is unhappy", "detect": "Response sentiment", "does": "Routed to a private form, not the public review link", "who": "The client sees the feedback internally"}, {"what": "No response at all", "detect": "Response window elapses", "does": "Automated follow-up sequence rather than a dead end", "who": "Nobody — handled"}, {"what": "Card render fails", "detect": "Render step error", "does": "Send falls back to text rather than not sending", "who": "Alert on the failed render"}, {"what": "Send is rejected", "detect": "Provider response", "does": "Retry with backoff, then hold", "who": "Alert with the customer record"}, {"what": "Duplicate trigger for one customer", "detect": "Record check before send", "does": "Second send suppressed", "who": "Nobody — by design"}], "journey": [{"h": "A customer finishes", "b": "The trigger is the completed purchase or service, not a marketing calendar."}, {"h": "The ask waits", "b": "A delay puts the request at the moment the customer is most likely to act."}, {"h": "The ask is personal", "b": "Copy is generated for that customer, and arrives as a branded card rather than plain text."}, {"h": "Sentiment decides", "b": "This is the design decision that matters: the route depends on how the customer actually feels."}, {"h": "Happy goes public", "b": "Straight to the review link, with no extra steps to lose them."}, {"h": "Unhappy stays private", "b": "Routed to a private form. The client learns about the problem; the public rating does not take the hit."}, {"h": "Silence gets a nudge", "b": "Non-responders enter a follow-up sequence instead of being dropped."}], "name": "ReviewShield AI", "eyebrow": "White-label review pipeline", "promise": "Happy customers are asked at the right moment and sent to a public review. Unhappy ones are routed to a private form before they ever reach Google.", "client": "Agencies reselling to local businesses", "status": "sellable product", "metrics": [["Workflow nodes", "32"], ["Pricing tiers built in", "2  (BD + global)"], ["Per-client isolation", "Yes"]]};
+var DATA = {"nodes": [{"id": "done", "label": "A customer finishes", "kind": "trigger"}, {"id": "ask", "label": "Asked at the right moment, personally", "kind": "step"}, {"id": "felt", "label": "How did they feel?", "kind": "logic"}, {"id": "pub", "label": "Happy → sent to a public review", "kind": "success"}, {"id": "priv", "label": "Unhappy → kept private, not public", "kind": "fail"}], "edges": [{"a": "done", "b": "ask"}, {"a": "ask", "b": "felt"}, {"a": "felt", "b": "pub"}, {"a": "felt", "b": "priv"}], "fails": [{"what": "Customer is unhappy", "detect": "Response sentiment", "does": "Routed to a private form, not the public review link", "who": "The client sees the feedback internally"}, {"what": "No response at all", "detect": "Response window elapses", "does": "Automated follow-up sequence rather than a dead end", "who": "Nobody — handled"}, {"what": "Card render fails", "detect": "Render step error", "does": "Send falls back to text rather than not sending", "who": "Alert on the failed render"}, {"what": "Send is rejected", "detect": "Provider response", "does": "Retry with backoff, then hold", "who": "Alert with the customer record"}, {"what": "Duplicate trigger for one customer", "detect": "Record check before send", "does": "Second send suppressed", "who": "Nobody — by design"}], "journey": [{"h": "A customer finishes", "b": "The trigger is the completed purchase or service, not a marketing calendar."}, {"h": "The ask waits", "b": "A delay puts the request at the moment the customer is most likely to act."}, {"h": "The ask is personal", "b": "Copy is generated for that customer, and arrives as a branded card rather than plain text."}, {"h": "Sentiment decides", "b": "This is the design decision that matters: the route depends on how the customer actually feels."}, {"h": "Happy goes public", "b": "Straight to the review link, with no extra steps to lose them."}, {"h": "Unhappy stays private", "b": "Routed to a private form. The client learns about the problem; the public rating does not take the hit."}, {"h": "Silence gets a nudge", "b": "Non-responders enter a follow-up sequence instead of being dropped."}], "name": "ReviewShield AI", "eyebrow": "White-label review pipeline", "promise": "Happy customers are asked at the right moment and sent to a public review. Unhappy ones are routed to a private form before they ever reach Google.", "audience": "Agencies reselling to local businesses", "status": "running on my own n8n", "metrics": [["Workflow nodes", "32"], ["Pricing tiers built in", "2  (BD + global)"], ["Per-client isolation", "Yes"]]};
 
 var flow = document.getElementById('flow');
 DATA.nodes.forEach(function(n, i){
