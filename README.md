@@ -23,7 +23,7 @@
 
 ### On this page
 
-[The problem](#the-problem) · [What changed](#what-changed) · [How it works](#how-it-works) · [When it breaks](#when-it-breaks) · [The stack](#the-stack) · [Limitations](#honest-limitations) · [What is here](#what-is-in-this-repository) · [Read deeper](#read-deeper)
+[The problem](#the-problem) · [What changed](#what-changed) · [How it works](#how-it-works) · [The shape of it](#the-shape-of-the-system) · [When it breaks](#when-it-breaks) · [Why this way](#why-it-is-built-this-way) · [Limitations](#honest-limitations) · [What is here](#what-is-in-this-repository) · [Read deeper](#read-deeper)
 
 ---
 
@@ -116,29 +116,39 @@ Red appears in exactly one role across every repo in this portfolio: where failu
 
 > **Walk it interactively** — [`docs/index.html`](docs/index.html) is a single self-contained page. Download it, open it in any browser, and press **Break it** to watch the failure path light up. Nothing to install, no network calls.
 
-## When it breaks
+## The shape of the system
 
-Most automation portfolios show you the happy path. The happy path is the easy half. This is the half that decides whether a system survives contact with a real business.
+Parts and the role each one plays. Not the wiring — no execution order, no prompt text, no thresholds. That is a deliberate line, and the last branch of the tree names exactly what sits on the other side of it.
 
-| What goes wrong | How it is detected | What the system does | Who finds out |
-| :--- | :--- | :--- | :--- |
-| **Customer is unhappy** | Response sentiment | Routed to a private form, not the public review link | The client sees the feedback internally |
-| **No response at all** | Response window elapses | Automated follow-up sequence rather than a dead end | Nobody — handled |
-| **Card render fails** | Render step error | Send falls back to text rather than not sending | Alert on the failed render |
-| **Send is rejected** | Provider response | Retry with backoff, then hold | Alert with the customer record |
-| **Duplicate trigger for one customer** | Record check before send | Second send suppressed | Nobody — by design |
+```text
+ReviewShield AI — the running system
+│
+├── Interfaces ...................... the systems it talks to
+│   ├── Email / SMS APIs ............ Delivery
+│   └── Google / Yelp Review APIs ... Where a positive response is sent
+│
+├── Judgement ....................... where a decision or a piece of writing is made
+│   └── OpenAI GPT-4 ................ Writes the outreach copy per customer instead of a template
+│
+├── Documents ....................... files becoming data, and data becoming files
+│   └── Puppeteer ................... Renders the branded review card as an image
+│
+├── Ground .......................... what the whole thing runs on
+│   └── n8n ......................... Orchestration, deployed per client instance
+│
+├── Failure design .................. 5 paths, designed before the features
+│   ├── detected by ................. an error output, a timer, or a failed connection
+│   ├── handled by .................. falling back, holding, or halting — never guessing
+│   └── announced to ................ a named person, with the reason attached
+│
+└── Not in this repository .......... the part that would let you skip the thinking
+    ├── the node graph .............. which part runs after which, and on what condition
+    ├── the prompts ................. wording, guardrails, the shape of the output
+    ├── the thresholds .............. what counts as urgent, late, at capacity, a match
+    └── the credentials ............. never committed, in any form, at any point
+```
 
-The default on an unhandled condition is to **stop and tell someone** — never to continue on a guess. A silent success is the failure mode that costs the most, because nobody goes looking for it.
-
-## The stack
-
-| Component | Why this one |
-| :--- | :--- |
-| **n8n** | Orchestration, deployed per client instance |
-| **Puppeteer** | Renders the branded review card as an image |
-| **OpenAI GPT-4** | Writes the outreach copy per customer instead of a template |
-| **Email / SMS APIs** | Delivery |
-| **Google / Yelp Review APIs** | Where a positive response is sent |
+Read it as a set of decisions rather than a parts list. Every part is there because a specific failure or a specific constraint put it there, and the two sections below are the same story told twice: **When it breaks** is what each part is defending against, and **Honest limitations** is what it costs to have chosen that part and not another.
 
 ### Counted, not estimated
 
@@ -154,6 +164,59 @@ The default on an unhandled condition is to **stop and tell someone** — never 
 
 - Branding, tone and outreach timing are configurable per deployed client instance, so an agency can run many clients off one system.
 
+## When it breaks
+
+Most automation portfolios show you the happy path. The happy path is the easy half. This is the half that decides whether a system survives contact with a real business.
+
+| What goes wrong | How it is detected | What the system does | Who finds out |
+| :--- | :--- | :--- | :--- |
+| **Customer is unhappy** | Response sentiment | Routed to a private form, not the public review link | The client sees the feedback internally |
+| **No response at all** | Response window elapses | Automated follow-up sequence rather than a dead end | Nobody — handled |
+| **Card render fails** | Render step error | Send falls back to text rather than not sending | Alert on the failed render |
+| **Send is rejected** | Provider response | Retry with backoff, then hold | Alert with the customer record |
+| **Duplicate trigger for one customer** | Record check before send | Second send suppressed | Nobody — by design |
+
+The default on an unhandled condition is to **stop and tell someone** — never to continue on a guess. A silent success is the failure mode that costs the most, because nobody goes looking for it.
+
+## Why it is built this way
+
+Three decisions, each with the option that was turned down and the price of turning it down. A choice with no cost attached to it was not a choice — it was a default, and defaults are not worth reading about.
+
+<details open>
+<summary><b>Why sentiment picks the route, and why the private form is the default</b></summary>
+
+**What it does.** The customer's reply decides where they go: positive to the public review link, negative to a private feedback form.
+
+**What was turned down.** Sending everyone to the public link. It would lift the review count immediately — and an unhappy customer directed to a public page is a complaint published at the client's own expense.
+
+**What that costs.** A short or ambiguous reply can route imperfectly, so the safe side has to be the default. Some genuinely positive replies go private and never become a public review. That is the cost of not risking the other error.
+
+</details>
+
+<details>
+<summary><b>Why the review card is rendered by a browser</b></summary>
+
+**What it does.** Puppeteer renders the branded card from real markup, so the card matches the brand the client already has.
+
+**What was turned down.** A templated image service. Fewer moving parts and no browser to keep alive — and the card is then locked to that service's template language, which is a bad place for a client's brand to live.
+
+**What that costs.** A separate renderer service to keep running. One more thing than a pure n8n build, and it is the part most likely to need a restart.
+
+</details>
+
+<details>
+<summary><b>Why the outreach copy is written per customer</b></summary>
+
+**What it does.** Each message is written against that customer's actual interaction rather than filled into a template.
+
+**What was turned down.** A template with merge fields. Cheap, deterministic, and it reads as bulk mail — which defeats the purpose of asking someone for a personal favour.
+
+**What that costs.** A provider call per customer, with the cost and the variance that implies. Review platform terms also differ by market on how customers may be directed, so configuration has to be checked per market before deployment.
+
+</details>
+
+Every cost above also appears in **Honest limitations** below. It is there twice on purpose: once as the reasoning, once as the consequence, so neither can be quietly dropped from the other.
+
 ## Honest limitations
 
 Every design decision costs something. These are the trade-offs in this build, stated by the person who made them.
@@ -164,36 +227,40 @@ Every design decision costs something. These are the trade-offs in this build, s
 
 ## What is in this repository
 
+Every file, and the question it answers. Same layout in all eleven repositories in this portfolio, so the second one you open needs no orientation at all.
+
 ```text
 reviewshield-ai/
-├── README.md                      ← you are here
-├── SECURITY.md                    # how to report something that should not be public
-├── NOTICE.md                      # what is withheld, and why
-├── LICENSE                        # covers the documentation, not a software grant
+├── README.md ....................... ← you are here
+├── SECURITY.md ..................... how to report something that should not be public
+├── NOTICE.md ....................... what is withheld, and why
+├── LICENSE ......................... covers the documentation, not a software grant
 │
-├── docs/
-│   ├── index.html                 # the interactive demo — one file, opens with no network
-│   ├── 01-problem.md              # the situation before, in full
-│   ├── 02-journey.md              # step by step, from their side
-│   ├── 03-architecture.md         # the diagrams and the reasoning
-│   ├── 04-failure-handling.md     # every failure path, and where it lands
-│   ├── 05-stack.md                # what was chosen, and what was rejected
-│   ├── 06-results.md              # what is measured, and what is not
-│   └── 07-limitations.md          # the trade-offs, in detail
+├── docs/ ........................... the long form — read in order or not at all
+│   ├── index.html .................. the interactive demo, one file, no network
+│   ├── 01-problem.md ............... the situation before, in full
+│   ├── 02-journey.md ............... step by step, from their side
+│   ├── 03-architecture.md .......... the diagrams, and why they are shaped that way
+│   ├── 04-failure-handling.md ...... every failure path, and where it lands
+│   ├── 05-stack.md ................. each choice, the option turned down, the cost
+│   ├── 06-results.md ............... what is measured, and what is deliberately not
+│   └── 07-limitations.md ........... the trade-offs, in detail
 │
-├── diagrams/
-│   ├── pipeline-lr.mmd            # the client-level flow, left to right
-│   └── pipeline-tb.mmd            # the same flow, top to bottom
+├── diagrams/ ....................... source, so the flow can be re-rendered
+│   ├── pipeline-lr.mmd ............. the client-level flow, left to right
+│   └── pipeline-tb.mmd ............. the same flow, top to bottom
 │
-├── assets/                        # banner and closing card, SVG, no CDN
+├── assets/ ......................... SVG only — nothing loaded from a CDN
+│   ├── banner.svg .................. the header on this page
+│   └── cta.svg ..................... the closing card
 │
-├── workflows/
-│   └── README.md                  # empty on purpose — see below
+├── workflows/ ...................... empty on purpose — see below
+│   └── README.md ................... why it is empty, in writing
 │
-└── .github/
-    ├── honesty-check.py           # the claim linter behind the badge
+└── .github/ ........................ the badge at the top of this page
+    ├── honesty-check.py ............ the claim linter it runs
     └── workflows/
-        └── honesty-check.yml      # runs it on every push
+        └── honesty-check.yml ....... runs it on every push
 ```
 
 There is no `src/` in that tree, and no `workflows/*.json`. That is not an omission — it is the design, and the next section says exactly what is being withheld and why.
